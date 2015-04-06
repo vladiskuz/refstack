@@ -19,6 +19,7 @@ import json
 import logging
 import os
 
+from beaker.middleware import SessionMiddleware
 from oslo_config import cfg
 from oslo_log import log
 from oslo_log import loggers
@@ -80,7 +81,9 @@ class JSONErrorHook(pecan.hooks.PecanHook):
 
     def on_error(self, state, exc):
         """Request error handler."""
-        if isinstance(exc, webob.exc.HTTPError):
+        if isinstance(exc, webob.exc.HTTPRedirection):
+            return
+        elif isinstance(exc, webob.exc.HTTPError):
             body = {'code': exc.status_int,
                     'title': exc.title}
             if self.debug:
@@ -138,5 +141,12 @@ def setup_app(config):
             headers=False, writer=loggers.WritableLogger(LOG, logging.DEBUG)
         )]
     )
+
+#    beaker_conf = {
+#        'session.key'           : 'sessionkey',
+#        'session.type'          : 'cookie',
+#        'session.validate_key'  : '05d2175d1090e31f42fa36e63b8d2aad',
+#    }
+#    app = SessionMiddleware(app, beaker_conf)
 
     return app

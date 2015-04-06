@@ -15,6 +15,8 @@
 
 """Refstack API's utils."""
 import copy
+import urllib
+import urlparse
 
 from oslo_config import cfg
 from oslo_log import log
@@ -121,3 +123,41 @@ def get_page_number(records_count):
                                'is greater than the total number of pages.')
 
     return (page_number, total_pages)
+
+
+def _add_parameters_to_url(params, url):
+    url_parts = list(urlparse.urlparse(url))
+    url_parts[4] = urllib.urlencode(params)
+    url = urlparse.urlunparse(url_parts)
+    return url
+
+
+def get_openstack_auth_url(state):
+    #!!!need to move to config
+    openstackid_oauth_url = 'https://localhost:8443/oauth2/auth'
+
+    params = {
+        const.ACCESS_TYPE: CONF.oid_oauth.access_type,
+        const.APPROVAL_PROMPT: CONF.oid_oauth.approval_prompt,
+        const.CLIENT_ID: CONF.oid_oauth.client_id,
+        const.REDIRECT_URI: CONF.oid_oauth.redirect_uri,
+        const.RESPONSE_TYPE: CONF.oid_oauth.response_type,
+        const.SCOPE: CONF.oid_oauth.scope,
+        const.STATE: state,
+    }
+
+    url = _add_parameters_to_url(params, openstackid_oauth_url)
+    return url 
+
+def get_openstack_token_url(auth_code):
+    #!!!need to move to config
+    openstack_token_url = 'https://localhost:8443/oauth2/token'
+
+    params = {
+        const.CODE: auth_code,
+        const.GRANT_TYPE: CONF.oid_oauth.grant_type,
+        const.REDIRECT_URI: CONF.oid_oauth.redirect_uri,
+    }
+
+    url = _add_parameters_to_url(params, openstack_token_url)
+    return url

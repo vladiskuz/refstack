@@ -17,7 +17,28 @@ Constants for Refstack API
 """
 
 # Names of input parameters for request
-START_DATE = 'start_date'
-END_DATE = 'end_date'
 CPID = 'cpid'
+END_DATE = 'end_date'
 PAGE = 'page'
+START_DATE = 'start_date'
+
+# OAuth2.0 parameters name for openstackid.org
+STATE = 'state'
+
+# OAuth2.0 request parameters name for openstackid.org
+ACCESS_TYPE = 'access_type'
+APPROVAL_PROMPT = 'approval_prompt'
+CLIENT_ID = 'client_id'
+CLIENT_SECRET = 'client_secret'
+GRANT_TYPE = 'grant_type'
+REDIRECT_URI = 'redirect_uri'
+RESPONSE_TYPE = 'response_type'
+SCOPE = 'scope'
+
+# OAuth2.0 response parameters name for openstackid.org
+ACCESS_TOKEN = 'access_token'
+CODE = 'code'
+ERROR = 'error'
+EXPIRES_IN = 'expires_in'
+REFRESH_TOKEN = 'refresh_token'
+TOKEN_TYPE = 'token_type'
